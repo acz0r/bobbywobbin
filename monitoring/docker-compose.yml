@@ -28,6 +28,8 @@ services:
     restart: unless-stopped
     ports:
       - "3001:3000"
+    environment:
+      - GF_DATE_FORMATS_USE_BROWSER_LOCALE=true
     volumes:
       - grafana_data:/var/lib/grafana
 
