@@ -80,9 +80,9 @@ function Install-Task {
     $triggerNetworkConnect = New-CimInstance -CimClass $CIMTriggerClass -ClientOnly
     $triggerNetworkConnect.Subscription = @"
 <QueryList>
-    <Query Id="0" Path="Microsoft-Windows-NetworkProfile/Operational">
-        <Select Path="Microsoft-Windows-NetworkProfile/Operational">*[System[EventID=10002]]</Select>
-    </Query>
+  <Query Id="0" Path="Microsoft-Windows-NetworkProfile/Operational">
+    <Select Path="Microsoft-Windows-NetworkProfile/Operational">*[System[EventID=10002]]</Select>
+  </Query>
 </QueryList>
 "@
     $triggerNetworkConnect.Enabled = $true
@@ -91,9 +91,9 @@ function Install-Task {
     $triggerNetworkDisconnect = New-CimInstance -CimClass $CIMTriggerClass -ClientOnly
     $triggerNetworkDisconnect.Subscription = @"
 <QueryList>
-    <Query Id="0" Path="Microsoft-Windows-NetworkProfile/Operational">
-        <Select Path="Microsoft-Windows-NetworkProfile/Operational">*[System[EventID=10001]]</Select>
-    </Query>
+  <Query Id="0" Path="Microsoft-Windows-NetworkProfile/Operational">
+    <Select Path="Microsoft-Windows-NetworkProfile/Operational">*[System[EventID=10001]]</Select>
+  </Query>
 </QueryList>
 "@
     $triggerNetworkDisconnect.Enabled = $true
