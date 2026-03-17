@@ -26,6 +26,13 @@ function Show-Notification {
 }
 
 function Set-DNS {
+    param([switch]$Auto)
+    
+    # Small delay when auto-triggered to let network fully establish
+    if ($Auto) {
+        Start-Sleep -Seconds 3
+    }
+
     # Check if on home network
     $onHomeNetwork = Test-Connection -ComputerName $HOME_GATEWAY -Count 1 -Quiet
 
@@ -42,8 +49,13 @@ function Set-DNS {
 
     foreach ($adapter in $adapters) {
         if ($onHomeNetwork) {
-            Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ($PIHOLE_IPV4, $PIHOLE_IPV6)
-            Show-Notification "Home Network" "DNS switched to Pi-hole (10.0.0.2)"
+            if ($vpnActive) {
+                Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ($PIHOLE_IPV4, $PIHOLE_IPV6)
+                Show-Notification "Home Network (VPN)" "DNS switched to Pi-hole (10.0.0.2)"
+            } else {
+                Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ($PIHOLE_IPV4, $PIHOLE_IPV6)
+                Show-Notification "Home Network" "DNS switched to Pi-hole (10.0.0.2)"
+            }
         } elseif ($vpnActive) {
             Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ($PIHOLE_IPV4, $PIHOLE_IPV6)
             Show-Notification "Home Network (VPN)" "DNS switched to Pi-hole (10.0.0.2)"
@@ -142,7 +154,7 @@ function Reset-DNS {
 
 # If called with -AutoRun flag just set DNS silently
 if ($args -contains "-AutoRun") {
-    Set-DNS
+    Set-DNS -Auto
     exit
 }
 
