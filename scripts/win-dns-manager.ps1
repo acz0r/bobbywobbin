@@ -48,17 +48,12 @@ function Set-DNS {
     }
 
     foreach ($adapter in $adapters) {
-        if ($onHomeNetwork) {
-            if ($vpnActive) {
-                Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ($PIHOLE_IPV4, $PIHOLE_IPV6)
-                Show-Notification "Home Network (VPN)" "DNS switched to Pi-hole (10.0.0.2)"
-            } else {
-                Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ($PIHOLE_IPV4, $PIHOLE_IPV6)
-                Show-Notification "Home Network" "DNS switched to Pi-hole (10.0.0.2)"
-            }
-        } elseif ($vpnActive) {
+        if ($vpnActive) {
             Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ($PIHOLE_IPV4, $PIHOLE_IPV6)
             Show-Notification "Home Network (VPN)" "DNS switched to Pi-hole (10.0.0.2)"
+        } elseif ($onHomeNetwork) {
+            Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ($PIHOLE_IPV4, $PIHOLE_IPV6)
+            Show-Notification "Home Network" "DNS switched to Pi-hole (10.0.0.2)"
         } else {
             Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ($FALLBACK_DNS1, $FALLBACK_DNS2, "2620:fe::fe", "2620:fe::9")
             Show-Notification "Foreign Network" "DNS switched to Quad9 (9.9.9.9)"
