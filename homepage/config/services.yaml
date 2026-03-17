@@ -1,0 +1,21 @@
+- My Services:
+    - Pi-hole:
+        href: https://pihole.bobby.wobbin/admin
+        description: Ad & tracker blocking
+        icon: pi-hole.png
+    - SearXNG:
+        href: https://surf.bobby.wobbin
+        description: Private search engine
+        icon: searxng.png
+    - Nginx Proxy Manager:
+        href: https://proxy.bobby.wobbin
+        description: Reverse proxy
+        icon: nginx-proxy-manager.png---
+    - Grafana:
+        href: https://grafana.bobby.wobbin
+        description: System monitoring
+        icon: grafana.png
+    - Uptime Kuma:
+        href: https://status.bobby.wobbin
+        description: Status
+        icon: uptime-kuma.png
