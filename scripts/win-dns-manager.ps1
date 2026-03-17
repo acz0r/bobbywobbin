@@ -51,8 +51,9 @@ function Install-Task {
     if (-NOT (Test-Path "C:\Scripts")) {
         New-Item -ItemType Directory -Path "C:\Scripts" | Out-Null
     }
-    Copy-Item -Path $PSCommandPath -Destination $SCRIPT_PATH -Force
-    Write-Host "Script copied to $SCRIPT_PATH" -ForegroundColor Green
+    $githubUrl = "https://raw.githubusercontent.com/acz0r/bobbywobbin/main/scripts/win-dns-manager.ps1"
+    Invoke-WebRequest -Uri $githubUrl -OutFile $SCRIPT_PATH
+    Write-Host "Script downloaded to $SCRIPT_PATH" -ForegroundColor Green
 
     $taskName = "BobbyWobbinDNSSwitcher"
     Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue
