@@ -1,0 +1,24 @@
+# Environment files
+**/.env
+
+# mkcert certificates and keys
+*.pem
+*.key
+*.crt
+
+# Pi-hole data (contains your DNS config and stats)
+etc-pihole/
+etc-dnsmasq.d/
+
+# Nginx Proxy Manager data (contains certificates and credentials)
+nginx-proxy-manager/data/
+nginx-proxy-manager/letsencrypt/
+
+# Homepage config (may contain API keys later)
+homepage/config/*
+!homepage/config/services.yaml
+
+uptime-kuma/data/
+
+crowdsec/*
+!crowdsec/docker-compose.yml

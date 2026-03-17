@@ -10,6 +10,21 @@ $FALLBACK_DNS2 = "149.112.112.112"
 $VPN_INTERFACE = "computer"  # WireGuard tunnel name
 $SCRIPT_PATH = "C:\Scripts\win-dns-manager.ps1"
 
+function Show-Notification {
+    param($Title, $Message)
+    [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
+    [Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom.XmlDocument, ContentType = WindowsRuntime] | Out-Null
+    
+    $template = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent(
+        [Windows.UI.Notifications.ToastTemplateType]::ToastText02
+    )
+    $template.SelectSingleNode('//text[@id=1]').InnerText = $Title
+    $template.SelectSingleNode('//text[@id=2]').InnerText = $Message
+    
+    $toast = [Windows.UI.Notifications.ToastNotification]::new($template)
+    [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('bobbywobbin DNS').Show($toast)
+}
+
 function Set-DNS {
     # Check if on home network
     $onHomeNetwork = Test-Connection -ComputerName $HOME_GATEWAY -Count 1 -Quiet
@@ -28,13 +43,13 @@ function Set-DNS {
     foreach ($adapter in $adapters) {
         if ($onHomeNetwork) {
             Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ($PIHOLE_IPV4, $PIHOLE_IPV6)
-            Write-Host "Home network detected on $($adapter.Name) - using Pi-hole" -ForegroundColor Green
+            Show-Notification "Home Network" "DNS switched to Pi-hole (10.0.0.2)"
         } elseif ($vpnActive) {
             Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ($PIHOLE_IPV4, $PIHOLE_IPV6)
-            Write-Host "VPN active on $($adapter.Name) - using Pi-hole" -ForegroundColor Cyan
+            Show-Notification "Home Network (VPN)" "DNS switched to Pi-hole (10.0.0.2)"
         } else {
             Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ($FALLBACK_DNS1, $FALLBACK_DNS2, "2620:fe::fe", "2620:fe::9")
-            Write-Host "Away from home on $($adapter.Name) - using Quad9" -ForegroundColor Yellow
+            Show-Notification "Foreign Network" "DNS switched to Quad9 (9.9.9.9)"
         }
     }
 
