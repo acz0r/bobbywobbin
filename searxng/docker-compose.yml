@@ -1,4 +1,21 @@
 services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - VPN_SERVICE_PROVIDER=protonvpn
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${PROTONVPN_WG_PRIVATE_KEY}
+      - FREE_ONLY=on
+      - HTTPPROXY=on
+      - HTTPPROXY_LISTENING_ADDRESS=:8118
+    ports:
+      - "8118:8118"
   searxng:
     image: searxng/searxng:latest
     container_name: searxng
