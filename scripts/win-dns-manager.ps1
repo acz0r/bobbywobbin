@@ -11,6 +11,8 @@ $VPN_INTERFACE = "computer"  # WireGuard tunnel name
 $SCRIPT_PATH = "C:\Scripts\win-dns-manager.ps1"
 
 function Set-DNS {
+    Start-Sleep -Seconds 5
+
     # Check if on home network
     $onHomeNetwork = Test-Connection -ComputerName $HOME_GATEWAY -Count 1 -Quiet
 
