@@ -34,6 +34,9 @@ function Set-DNS {
             Write-Host "VPN active on $($adapter.Name) - using Pi-hole" -ForegroundColor Cyan
         } else {
             Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ($FALLBACK_DNS1, $FALLBACK_DNS2)
+            # Set IPv6 DNS to Quad9 as well
+            netsh interface ipv6 set dnsservers $adapter.Name static 2620:fe::fe primary
+            netsh interface ipv6 add dnsservers $adapter.Name 2620:fe::9 index=2
             Write-Host "Away from home on $($adapter.Name) - using Quad9" -ForegroundColor Yellow
         }
     }
