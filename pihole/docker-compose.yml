@@ -1,0 +1,30 @@
+services:
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      TZ: 'America/Chicago'
+      FTLCONF_webserver_api_password: '${PIHOLE_PASSWORD}'
+      FTLCONF_dns_upstreams: '172.20.0.3#53'
+      FTLCONF_dns_listeningMode: 'ALL'
+      FTLCONF_webserver_port: '8080'
+    volumes:
+      - ./etc-pihole:/etc/pihole
+      - ./etc-dnsmasq.d:/etc/dnsmasq.d
+
+  unbound:
+    image: mvance/unbound-rpi:latest
+    container_name: unbound
+    restart: unless-stopped
+    networks:
+      pihole_net:
+        ipv4_address: 172.20.0.3
+
+networks:
+  pihole_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
