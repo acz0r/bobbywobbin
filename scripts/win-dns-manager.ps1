@@ -67,8 +67,9 @@ function Install-Task {
         -MultipleInstances IgnoreNew
 
     $principal = New-ScheduledTaskPrincipal `
-        -UserId "SYSTEM" `
-        -RunLevel Highest
+        -UserId "$env:USERDOMAIN\$env:USERNAME" `
+        -RunLevel Highest `
+        -LogonType Interactive
 
     # Trigger on logon
     $triggerLogon = New-ScheduledTaskTrigger -AtLogOn
