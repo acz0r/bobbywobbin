@@ -12,7 +12,7 @@ $SCRIPT_PATH = "C:\Scripts\win-dns-manager.ps1"
 
 function Set-DNS {
     # Check if on home network
-    $onHomeNetwork = Test-Connection -ComputerName $HOME_GATEWAY -Count 1 -Quiet -TimeoutSeconds 1
+    $onHomeNetwork = Test-Connection -ComputerName $HOME_GATEWAY -Count 1 -Quiet
 
     # Check if VPN is active
     $vpnActive = Get-NetAdapter | Where-Object { $_.Name -like "*$VPN_INTERFACE*" -and $_.Status -eq "Up" }
